@@ -101,11 +101,11 @@ TEMPLATE;
         string $contents
     ) : string {
         // parse out the source file that generated this file
-        preg_match('/<p>{{ DOCS_SOURCE_PATH:(.*) }}<\/p>/', $contents, $match);
+        preg_match('/<p>{{ DOCS_SOURCE_PATH : (.*) }}<\/p>/', $contents, $match);
 
         $docsSourcePath = $match[1];
 
-        // get rid of the special DOCS_SOURCE_PATH: syntax in the contents
+        // get rid of the special DOCS_SOURCE_PATH : syntax in the contents
         $contents = str_replace($match[0], '', $contents);
 
         $title = $this->extractTitle($contents);

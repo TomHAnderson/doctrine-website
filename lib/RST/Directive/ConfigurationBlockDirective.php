@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Doctrine\Website\RST\Directive;
 
-use Doctrine\RST\Document;
 use Doctrine\RST\Nodes\CodeNode;
+use Doctrine\RST\Nodes\DocumentNode;
 use Doctrine\RST\Nodes\Node;
 use Doctrine\RST\Nodes\RawNode;
 use Doctrine\RST\Parser;
@@ -29,7 +29,7 @@ class ConfigurationBlockDirective extends SubDirective
         string $data,
         array $options
     ) : ?Node {
-        if (! $document instanceof Document) {
+        if (! $document instanceof DocumentNode) {
             return null;
         }
 

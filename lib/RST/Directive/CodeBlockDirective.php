@@ -13,7 +13,6 @@ use Doctrine\Website\Docs\CodeBlockRenderer;
 use function array_reverse;
 use function assert;
 use function is_array;
-use function is_string;
 use function preg_split;
 use function trim;
 
@@ -64,7 +63,6 @@ class CodeBlockDirective extends Directive
         $kernel = $parser->getKernel();
 
         $nodeValue = $node->getValue();
-        assert(is_string($nodeValue));
 
         $lines = $this->getLines($nodeValue);
 

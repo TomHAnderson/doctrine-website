@@ -6,11 +6,10 @@ namespace Doctrine\Website\Tests\Docs;
 
 use AlgoliaSearch\Client;
 use AlgoliaSearch\Index;
+use Doctrine\RST\Configuration;
 use Doctrine\RST\Environment;
-use Doctrine\RST\HTML\Document;
-use Doctrine\RST\HTML\Nodes\ParagraphNode;
-use Doctrine\RST\HTML\Nodes\TitleNode;
-use Doctrine\RST\Nodes\RawNode;
+use Doctrine\RST\Nodes\DocumentNode;
+use Doctrine\RST\Parser;
 use Doctrine\Website\Docs\SearchIndexer;
 use Doctrine\Website\Model\Project;
 use Doctrine\Website\Model\ProjectVersion;
@@ -80,7 +79,7 @@ class SearchIndexerTest extends TestCase
             ->with(SearchIndexer::INDEX_NAME)
             ->willReturn($index);
 
-        $document    = $this->createMock(Document::class);
+        $document    = $this->createMock(DocumentNode::class);
         $environment = $this->createMock(Environment::class);
 
         $document->expects(self::once())
@@ -91,23 +90,38 @@ class SearchIndexerTest extends TestCase
             ->method('getUrl')
             ->willReturn('index');
 
-        $node1 = new RawNode('Test 1');
-        $node2 = new RawNode('Test 2');
-        $node3 = new RawNode('Test 3');
-        $node4 = new RawNode('Test 4');
-        $node5 = new RawNode('Test 5');
+        $configuration = new Configuration();
+        $nodeFactory   = $configuration->getNodeFactory();
 
-        $h1Node = new TitleNode($node1, 1, 'title.1');
-        $h2Node = new TitleNode($node2, 2, 'title.1.1');
-        $h3Node = new TitleNode($node3, 3, 'title.1.2');
-        $h4Node = new TitleNode($node4, 4, 'title.1.3');
-        $h5Node = new TitleNode($node5, 5, 'title.1.4');
+        $node1 = $nodeFactory->createRawNode('Test 1');
+        $node2 = $nodeFactory->createRawNode('Test 2');
+        $node3 = $nodeFactory->createRawNode('Test 3');
+        $node4 = $nodeFactory->createRawNode('Test 4');
+        $node5 = $nodeFactory->createRawNode('Test 5');
 
-        $paragraph1Node = new ParagraphNode('Paragraph 1');
-        $paragraph2Node = new ParagraphNode('Paragraph 2');
-        $paragraph3Node = new ParagraphNode('Paragraph 3');
-        $paragraph4Node = new ParagraphNode('Paragraph 4');
-        $paragraph5Node = new ParagraphNode('Paragraph 5');
+        $h1Node = $nodeFactory->createTitleNode($node1, 1, 'title.1');
+        $h2Node = $nodeFactory->createTitleNode($node2, 2, 'title.1.1');
+        $h3Node = $nodeFactory->createTitleNode($node3, 3, 'title.1.2');
+        $h4Node = $nodeFactory->createTitleNode($node4, 4, 'title.1.3');
+        $h5Node = $nodeFactory->createTitleNode($node5, 5, 'title.1.4');
+
+        $parser = $this->createMock(Parser::class);
+
+        $paragraph1Node = $nodeFactory->createParagraphNode(
+            $nodeFactory->createSpanNode($parser, 'Paragraph 1')
+        );
+        $paragraph2Node = $nodeFactory->createParagraphNode(
+            $nodeFactory->createSpanNode($parser, 'Paragraph 2')
+        );
+        $paragraph3Node = $nodeFactory->createParagraphNode(
+            $nodeFactory->createSpanNode($parser, 'Paragraph 3')
+        );
+        $paragraph4Node = $nodeFactory->createParagraphNode(
+            $nodeFactory->createSpanNode($parser, 'Paragraph 4')
+        );
+        $paragraph5Node = $nodeFactory->createParagraphNode(
+            $nodeFactory->createSpanNode($parser, 'Paragraph 5')
+        );
 
         $nodes = [
             $h1Node,
